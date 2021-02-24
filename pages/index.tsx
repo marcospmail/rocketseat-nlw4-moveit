@@ -1,10 +1,12 @@
 import Head from 'next/head'
+
 import ExperienceBar from '../src/components/ExperienceBar'
 import Profile from '../src/components/Profile'
 import CompletedChallenges from '../src/components/CompletedChallenges'
+import Countdown from '../src/components/Countdown'
+import ChallengeBox from '../src/components/ChallengeBox'
 
 import styles from '../src/styles/pages/Home.module.css'
-import Countdown from '../src/components/Countdown'
 
 const Home: React.FC = () => {
   return (
@@ -22,7 +24,9 @@ const Home: React.FC = () => {
           <Countdown />
         </div>
 
-        <div />
+        <div>
+          <ChallengeBox />
+        </div>
       </section>
     </div>
   )

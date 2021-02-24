@@ -1,18 +1,31 @@
+import { useMemo } from 'react'
+import { useLevelContext } from '../contexts/ChallengeContext'
 import styles from '../styles/components/ExperienceBar.module.css'
 
 const ExperienceBar: React.FC = () => {
-  return (
-    <header className={styles.experienceBar} >
-      <span>0x</span>
-      <div>
-        <div style={{ width: '50%' }} ></div>
+  const { currentExperience, experienceToNextLevel } = useLevelContext()
 
-        <span className={styles.currentExperience} style={{ left: '50%' }}> 300xp </span>
+  const percentToNextLevel = useMemo(() => {
+    return Math.round(currentExperience * 100) / experienceToNextLevel
+  }, [currentExperience, experienceToNextLevel])
+
+  return (
+    <header className={styles.experienceBar}>
+      <span>0xp</span>
+      <div>
+        <div style={{ width: `${percentToNextLevel}%` }} />
+
+        <span
+          className={styles.currentExperience}
+          style={{ left: `${percentToNextLevel}%` }}
+        >
+          {currentExperience} xp
+        </span>
       </div>
 
-      <span>600xp</span>
+      <span>{experienceToNextLevel} xp</span>
     </header>
   )
 }
 
-export default ExperienceBar;
+export default ExperienceBar
