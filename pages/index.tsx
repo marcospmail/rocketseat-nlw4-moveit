@@ -1,5 +1,7 @@
 import Head from 'next/head'
 
+import CountdownProvider from '../src/contexts/CountdownContext'
+
 import ExperienceBar from '../src/components/ExperienceBar'
 import Profile from '../src/components/Profile'
 import CompletedChallenges from '../src/components/CompletedChallenges'
@@ -17,17 +19,19 @@ const Home: React.FC = () => {
 
       <ExperienceBar />
 
-      <section>
-        <div>
-          <Profile />
-          <CompletedChallenges />
-          <Countdown />
-        </div>
+      <CountdownProvider>
+        <section>
+          <div>
+            <Profile />
+            <CompletedChallenges />
+            <Countdown />
+          </div>
 
-        <div>
-          <ChallengeBox />
-        </div>
-      </section>
+          <div>
+            <ChallengeBox />
+          </div>
+        </section>
+      </CountdownProvider>
     </div>
   )
 }

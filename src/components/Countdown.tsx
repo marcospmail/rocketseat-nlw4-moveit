@@ -1,52 +1,20 @@
-import { useEffect, useState } from 'react'
 import { useLevelContext } from '../contexts/ChallengeContext'
+import { useCountdownContext } from '../contexts/CountdownContext'
 import styles from '../styles/components/Countdown.module.css'
-
-const INITIAL_TIMER = 5 // 25 * 60
-
-let countdownTimeout: NodeJS.Timeout
+import CompletedChallenges from './CompletedChallenges'
 
 const Countdown: React.FC = () => {
-  const [timer, setTimer] = useState(INITIAL_TIMER)
-  const [isActive, setIsActive] = useState(false)
-  const [isFinished, setIsFinished] = useState(false)
-
-  const { startNewChallenge } = useLevelContext()
-
-  const minutes = Math.floor(timer / 60)
-  const seconds = timer % 60
+  const {
+    minutes,
+    seconds,
+    isFinished,
+    isActive,
+    startCountdown,
+    resetCountdown,
+  } = useCountdownContext()
 
   const [minutesLeft, minutesRight] = String(minutes).padStart(2, '0').split('')
   const [secondsLeft, secondsRight] = String(seconds).padStart(2, '0').split('')
-
-  const startCountdown = () => {
-    setIsActive(true)
-  }
-
-  const resetTimer = () => {
-    setTimer(INITIAL_TIMER)
-  }
-
-  const resetCountdown = () => {
-    clearTimeout(countdownTimeout)
-    setIsActive(false)
-    resetTimer()
-  }
-
-  useEffect(() => {
-    if (!isActive) return
-
-    if (isActive && timer === 0) {
-      setIsFinished(true)
-      setIsActive(false)
-      startNewChallenge()
-      return
-    }
-
-    countdownTimeout = setTimeout(() => {
-      setTimer(oldTimer => oldTimer - 1)
-    }, 1000)
-  }, [isActive, timer])
 
   return (
     <>

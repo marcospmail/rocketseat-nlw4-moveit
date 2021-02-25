@@ -1,4 +1,12 @@
-import { createContext, ReactNode, useState, useContext, useMemo } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useState,
+  useContext,
+  useMemo,
+  useEffect,
+  useCallback,
+} from 'react'
 
 import challenges from '../../challenges.json'
 
@@ -21,22 +29,28 @@ interface ChallengeContextData {
   currentChallenge: Challenge
   levelUp: () => void
   startNewChallenge: () => void
-}
-
-interface ChallengeProviderProps {
-  children: ReactNode
+  completeChallenge: () => void
+  resetChallenge: () => void
 }
 
 const ChallengesContext = createContext({} as ChallengeContextData)
 
-const ChallengeProvider: React.FC<ChallengeProviderProps> = ({ children }) => {
+const ChallengeProvider: React.FC = ({ children }) => {
   const [level, setLevel] = useState(1)
   const [currentExperience, setCurrentExperience] = useState(30)
   const [challengesCompleted, setChallengesCompleted] = useState(0)
   const [currentChallenge, setCurrentChallenge] = useState<Challenge>(null)
 
+  useEffect(() => {
+    Notification.requestPermission()
+  }, [])
+
+  const calcExperienceToNextLevel = useCallback((levelParam: number) => {
+    return (levelParam + 1) * 4 ** 2
+  }, [])
+
   const experienceToNextLevel = useMemo(() => {
-    return (level + 1) * 4 ** 2
+    return calcExperienceToNextLevel(level)
   }, [level])
 
   const levelUp = () => {
@@ -48,6 +62,46 @@ const ChallengeProvider: React.FC<ChallengeProviderProps> = ({ children }) => {
     const newChallenge = challenges[newChallengeIndex] as Challenge
 
     setCurrentChallenge(newChallenge)
+
+    new Audio('/notification.mp3').play()
+
+    if (Notification.permission === 'granted') {
+      /* eslint-disable no-new */
+      new Notification('Novo desafio', {
+        body: `Valendo ${newChallenge.amount}xp`,
+      })
+    }
+  }
+
+  const resetChallenge = () => {
+    setCurrentChallenge(null)
+  }
+
+  const completeChallenge = () => {
+    if (!currentChallenge) {
+      return
+    }
+
+    const { amount } = currentChallenge
+
+    let tempLevel = level
+    let tempCurrentExperience = currentExperience
+    let tempExperienceToNextLevel = experienceToNextLevel
+
+    let finalExperience = currentExperience + amount
+
+    while (finalExperience >= tempExperienceToNextLevel) {
+      finalExperience -= tempExperienceToNextLevel - tempCurrentExperience
+      tempLevel += 1
+      tempExperienceToNextLevel = calcExperienceToNextLevel(tempLevel)
+
+      tempCurrentExperience = 0
+    }
+
+    setLevel(tempLevel)
+    setCurrentExperience(finalExperience)
+    setCurrentChallenge(null)
+    setChallengesCompleted(oldChallengesCompleted => oldChallengesCompleted + 1)
   }
 
   return (
@@ -60,6 +114,8 @@ const ChallengeProvider: React.FC<ChallengeProviderProps> = ({ children }) => {
         startNewChallenge,
         currentChallenge,
         experienceToNextLevel,
+        completeChallenge,
+        resetChallenge,
       }}
     >
       {children}
