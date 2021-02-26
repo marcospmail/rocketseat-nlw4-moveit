@@ -1,7 +1,5 @@
-import { useLevelContext } from '../contexts/ChallengeContext'
 import { useCountdownContext } from '../contexts/CountdownContext'
 import styles from '../styles/components/Countdown.module.css'
-import CompletedChallenges from './CompletedChallenges'
 
 const Countdown: React.FC = () => {
   const {

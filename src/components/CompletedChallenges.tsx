@@ -1,13 +1,13 @@
-import { useLevelContext } from '../contexts/ChallengeContext'
+import { useChallengeContext } from '../contexts/ChallengeContext'
 import styles from '../styles/components/CompletedChallenges.module.css'
 
 const CompletedChallenges: React.FC = () => {
-  const { challengesCompleted } = useLevelContext()
+  const { challengesCompleted } = useChallengeContext()
 
   return (
     <div className={styles.completedChallengesContainer}>
+      <span>Desafios completados</span>
       <span>{challengesCompleted}</span>
-      <span>5</span>
     </div>
   )
 }

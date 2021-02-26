@@ -1,4 +1,4 @@
-import { useLevelContext } from '../contexts/ChallengeContext'
+import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useCountdownContext } from '../contexts/CountdownContext'
 
 import styles from '../styles/components/ChallengeBox.module.css'
@@ -8,7 +8,7 @@ const ChallengeBox: React.FC = () => {
     currentChallenge,
     completeChallenge,
     resetChallenge,
-  } = useLevelContext()
+  } = useChallengeContext()
   const { resetCountdown } = useCountdownContext()
 
   const handleChallengeSucceeded = () => {

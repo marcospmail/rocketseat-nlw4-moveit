@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { useLevelContext } from './ChallengeContext'
+import { useChallengeContext } from './ChallengeContext'
 
 interface CountdownContextData {
   minutes: number
@@ -11,14 +11,14 @@ interface CountdownContextData {
   resetCountdown: () => void
 }
 
-const INITIAL_TIMER = 2 // 25 * 60
+const INITIAL_TIMER = 10 // 25 * 60
 
 const CountdownContext = createContext({} as CountdownContextData)
 
 let countdownTimeout: NodeJS.Timeout
 
 const CountdownProvider: React.FC = ({ children }) => {
-  const { startNewChallenge } = useLevelContext()
+  const { startNewChallenge } = useChallengeContext()
 
   const [timer, setTimer] = useState(INITIAL_TIMER)
   const [isActive, setIsActive] = useState(false)

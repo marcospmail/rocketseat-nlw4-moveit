@@ -1,8 +1,8 @@
-import { useLevelContext } from '../contexts/ChallengeContext'
+import { useChallengeContext } from '../contexts/ChallengeContext'
 import styles from '../styles/components/Profile.module.css'
 
 const Profile: React.FC = () => {
-  const { level } = useLevelContext()
+  const { level } = useChallengeContext()
 
   return (
     <div className={styles.profileContainer}>

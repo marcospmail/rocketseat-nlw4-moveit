@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { useLevelContext } from '../contexts/ChallengeContext'
+import { useChallengeContext } from '../contexts/ChallengeContext'
 import styles from '../styles/components/ExperienceBar.module.css'
 
 const ExperienceBar: React.FC = () => {
-  const { currentExperience, experienceToNextLevel } = useLevelContext()
+  const { currentExperience, experienceToNextLevel } = useChallengeContext()
 
   const percentToNextLevel = useMemo(() => {
     return Math.round(currentExperience * 100) / experienceToNextLevel
@@ -17,7 +17,7 @@ const ExperienceBar: React.FC = () => {
 
         <span
           className={styles.currentExperience}
-          style={{ left: `${percentToNextLevel}%` }}
+          style={{ left: `${percentToNextLevel ?? 0}%` }}
         >
           {currentExperience} xp
         </span>
